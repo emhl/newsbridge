@@ -4,25 +4,28 @@ from telethon import TelegramClient, events
 from telethon.events.newmessage import NewMessage
 from telethon.events import newmessage
 from discord import Webhook, RequestsWebhookAdapter
-from telethon.tl.types import MessageEntityUrl, MessageEntityTextUrl
+from telethon.tl.types import MessageEntityUrl, MessageEntityTextUrl,\
+    MessageEntityBold, MessageEntityItalic, MessageEntityUnderline,\
+    MessageEntityStrike, MessageEntityCode, MessageMediaWebPage
 from discord.file import File
 
 # Remember to use your own values from my.telegram.org!
-api_id = 12345678
-api_hash = 'aaaaaaaaaaaaaaaaaaaaaaaa'
+api_id = 1234567
+api_hash = '1234512345123451234512345'
 tg_client = TelegramClient('anon', api_id, api_hash)
 
 
 #primary
 telegram_chat1 = -100000000000
-webhook_id_1 = 9999999999999999999
-webhook_token_1 ='eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+webhook_id_1 = 99999999999999999999
+webhook_token_1 ='eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 username1 = 'name1'
+
 
 #secondary
 telegram_chat2 = -100000000000
-webhook_id_2 = 9999999999999999999
-webhook_token_2 ='eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+webhook_id_2 = 99999999999999999999
+webhook_token_2 ='eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 username2 = 'name2'
 
 
@@ -40,7 +43,7 @@ async def handler1(event):
             path = await m.download_media()
             print('File saved to', path)  # printed after download is done
             try:
-                webhook.send(file=File(path))
+                webhook.send(file=File(path), username=username1)
             except:
                 print('unable to send file')
     
@@ -48,7 +51,7 @@ async def handler1(event):
         print('short message')
         webhook.send(message, username=username1)
         print('sent message')
-    elif len(message)<4000:
+    elif len(message)<3300:
         print('long message')
         message1 = ''
         message2 = ''
@@ -100,7 +103,7 @@ async def handler2(event):
             path = await m.download_media()
             print('File saved to', path)  # printed after download is done
             try:
-                webhook.send(file=File(path))
+                webhook.send(file=File(path), username=username2)
             except:
                 print('unable to send file')
     
@@ -109,7 +112,7 @@ async def handler2(event):
         print('short message')
         webhook.send(message, username=username2)
         print('sent message')
-    elif len(message)<4000:
+    elif len(message)<3300:
         print('long message')
         message1 = ''
         message2 = ''
@@ -147,6 +150,8 @@ async def handler2(event):
         webhook.send(message2, username=username2)
         webhook.send(message3, username=username2)
         print('sent messages')
+        
+        
 
 def improveMessage(m):
     offset = 0
@@ -161,6 +166,13 @@ def improveMessage(m):
                     print('add url')
                     m.message = m.message[:entity.offset+entity.length+offset] + ' ('+entity.url+') ' + m.message[offset+entity.offset+entity.length:]
                     offset = offset + len(entity.url) + 4
+                elif (type(entity) is MessageEntityUrl):
+                    print('other url')
+                    if m.message[entity.offset+offset:entity.offset+offset+entity.length].find('http') == -1:
+                        m.message = m.message[:entity.offset+offset]+ 'https://' + m.message[entity.offset+offset:]
+                        offset = offset + 8
+                    else:
+                        print('had http')
                 elif (type(entity) is MessageEntityBold ):
                     print('bold')
                     m.message = m.message[:entity.offset+offset] + '**' + m.message[entity.offset+offset:entity.offset+offset+entity.length-1] + '**' + m.message[entity.offset+offset+entity.length-1:]
@@ -201,3 +213,4 @@ async def postImage(m):
 with tg_client:
     #client.loop.run_until_complete(main())
     tg_client.run_until_disconnected()
+    
