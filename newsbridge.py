@@ -39,13 +39,13 @@ async def handler1(event):
     
     webhook = Webhook.partial(webhook_id_1, webhook_token_1, adapter=RequestsWebhookAdapter())
     
-    if m.file:
-            path = await m.download_media()
-            print('File saved to', path)  # printed after download is done
-            try:
-                webhook.send(file=File(path), username=username1)
-            except:
-                print('unable to send file')
+    if (m.file and not m.web_preview):
+        path = await m.download_media()
+        print('File saved to', path)  # printed after download is done
+        try:
+            webhook.send(file=File(path), username=username2)
+        except:
+            print('unable to send file')
     
     if len(message)<2000:
         print('short message')
@@ -99,13 +99,13 @@ async def handler2(event):
     print(len(message))
     
     webhook = Webhook.partial(webhook_id_2, webhook_token_2, adapter=RequestsWebhookAdapter())
-    if m.file:
-            path = await m.download_media()
-            print('File saved to', path)  # printed after download is done
-            try:
-                webhook.send(file=File(path), username=username2)
-            except:
-                print('unable to send file')
+    if (m.file and not m.web_preview):
+        path = await m.download_media()
+        print('File saved to', path)  # printed after download is done
+        try:
+            webhook.send(file=File(path), username=username2)
+        except:
+            print('unable to send file')
     
     
     if len(message)<2000:
