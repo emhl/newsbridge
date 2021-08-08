@@ -43,7 +43,7 @@ async def handler1(event):
         path = await m.download_media()
         print('File saved to', path)  # printed after download is done
         try:
-            webhook.send(file=File(path), username=username2)
+            webhook.send(file=File(path), username=username1)
         except:
             print('unable to send file')
     
