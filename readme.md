@@ -7,7 +7,7 @@ With this program you can bridge/forward all messages from a Telegram Channel th
 - clone the project
 - install discord.py and telethon with `pip install -r requirements.txt`
 ### setting up the telegram side
-- get your Telegram Developer API ID and Hash from [my.telegram.org](https://my.telegram.org/auth)
+- either get your Telegram Developer API ID and Hash from [my.telegram.org](https://my.telegram.org/auth) or create a bot with [@BotFather](https://tm.me/BotFather) (the second option only works with public channels or if the bot is in the group/channel and privacy mode is turned off) 
 - set your api_id and api_hash in code
 - get the Telegram Channel ID, you can use this bot [@username_to_id_bot](https://t.me/username_to_id_bot)
 - set your telegram_chat1
