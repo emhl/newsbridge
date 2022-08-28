@@ -46,6 +46,7 @@ async def handler1(event):
             await webhook.send(file=File(path))
         except:
             print('unable to send file')
+        os.remove(path)
     
     if len(message)<2000:
         print('short message')
@@ -107,6 +108,7 @@ async def handler2(event):
             await webhook.send(file=File(path))
         except:
             print('unable to send file')
+        os.remove(path)
     
     
     if len(message)<2000:
