@@ -1,55 +1,55 @@
-import asyncio
+import os
+from dotenv import load_dotenv
+
+import aiohttp
 import discord
-from telethon import TelegramClient, events
-from telethon.events.newmessage import NewMessage
-from telethon.events import newmessage
-from discord import Webhook, RequestsWebhookAdapter
-from telethon.tl.types import MessageEntityUrl, MessageEntityTextUrl,\
-    MessageEntityBold, MessageEntityItalic, MessageEntityUnderline,\
-    MessageEntityStrike, MessageEntityCode, MessageMediaWebPage
 from discord.file import File
 
+from telethon import TelegramClient, events
+from telethon.tl.types import MessageEntityUrl, MessageEntityTextUrl,\
+    MessageEntityBold, MessageEntityItalic, MessageEntityUnderline,\
+    MessageEntityStrike, MessageEntityCode
+
+
+load_dotenv()
 # Remember to use your own values from my.telegram.org!
-api_id = 1234567
-api_hash = '1234512345123451234512345'
-tg_client = TelegramClient('anon', api_id, api_hash)
+API_ID = os.getenv('API_ID')
+API_HASH = os.getenv('API_HASH')
+tg_client = TelegramClient('anon', API_ID, API_HASH)
 
 
 #primary
-telegram_chat1 = -100000000000
-webhook_id_1 = 99999999999999999999
-webhook_token_1 ='eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-username1 = 'name1'
+CHAT_ID_1 = int(os.getenv('CHAT_ID_1'))
+WEBHOOK_URL_1 = os.getenv('WEBHOOK_URL_1')
 
 
 #secondary
-telegram_chat2 = -100000000000
-webhook_id_2 = 99999999999999999999
-webhook_token_2 ='eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-username2 = 'name2'
+CHAT_ID_2 = int(os.getenv('CHAT_ID_2'))
+WEBHOOK_URL_2 = os.getenv('WEBHOOK_URL_2')
 
 
 print('started')
+
     
-@tg_client.on(events.NewMessage(chats=telegram_chat1))
+@tg_client.on(events.NewMessage(chats=CHAT_ID_1))
 async def handler1(event):
     print('got message')
     m= event.message
     message = improveMessage(m)
-    
-    webhook = Webhook.partial(webhook_id_1, webhook_token_1, adapter=RequestsWebhookAdapter())
-    
+    session = aiohttp.ClientSession()
+    webhook = discord.Webhook.from_url(WEBHOOK_URL_1, session=session)
+
     if (m.file and not m.web_preview):
         path = await m.download_media()
         print('File saved to', path)  # printed after download is done
         try:
-            webhook.send(file=File(path), username=username1)
+            await webhook.send(file=File(path))
         except:
             print('unable to send file')
     
     if len(message)<2000:
         print('short message')
-        webhook.send(message, username=username1)
+        await webhook.send(message)
         print('sent message')
     elif len(message)<3300:
         print('long message')
@@ -65,8 +65,8 @@ async def handler1(event):
                 message2 = message2 + x + '\n'
             i = i+1
         
-        webhook.send(message1, username=username1)
-        webhook.send(message2, username=username1)
+        await webhook.send(message1)
+        await webhook.send(message2)
         print('sent messages')
     else:
         print('longer message')
@@ -85,32 +85,33 @@ async def handler1(event):
                 message3 = message3 + x + '\n'
             i = i+1
         
-        webhook.send(message1, username=username1)
-        webhook.send(message2, username=username1)
-        webhook.send(message3, username=username1)
+        await webhook.send(message1)
+        await webhook.send(message2)
+        await webhook.send(message3)
         print('sent messages')
 
-@tg_client.on(events.NewMessage(chats=telegram_chat2))
+@tg_client.on(events.NewMessage(chats=CHAT_ID_2))
 async def handler2(event):
     print('got message')
     m= event.message
     message = improveMessage(m)
     print(message)
     print(len(message))
-    
-    webhook = Webhook.partial(webhook_id_2, webhook_token_2, adapter=RequestsWebhookAdapter())
+    session = aiohttp.ClientSession()
+    webhook = discord.Webhook.from_url(WEBHOOK_URL_2, session=session)
+
     if (m.file and not m.web_preview):
         path = await m.download_media()
         print('File saved to', path)  # printed after download is done
         try:
-            webhook.send(file=File(path), username=username2)
+            await webhook.send(file=File(path))
         except:
             print('unable to send file')
     
     
     if len(message)<2000:
         print('short message')
-        webhook.send(message, username=username2)
+        await webhook.send(message)
         print('sent message')
     elif len(message)<3300:
         print('long message')
@@ -126,8 +127,8 @@ async def handler2(event):
                 message2 = message2 + x + '\n'
             i = i+1
         
-        webhook.send(message1, username=username2)
-        webhook.send(message2, username=username2)
+        await webhook.send(message1)
+        await webhook.send(message2)
         print('sent messages')
     else:
         print('longer message')
@@ -146,9 +147,9 @@ async def handler2(event):
                 message3 = message3 + x + '\n'
             i = i+1
         
-        webhook.send(message1, username=username2)
-        webhook.send(message2, username=username2)
-        webhook.send(message3, username=username2)
+        await webhook.send(message1)
+        await webhook.send(message2)
+        await webhook.send(message3)
         print('sent messages')
         
         

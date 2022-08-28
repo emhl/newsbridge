@@ -1,3 +1,8 @@
+# program configs
 /*.session
 /*.session-journal
+.env
+
+# ide cobfigs
 /.idea
+/.vscode
