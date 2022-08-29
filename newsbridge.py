@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 
 import aiohttp
 import discord
-from discord.file import File
 
 from telethon import TelegramClient, events
 from telethon.tl.types import MessageEntityUrl, MessageEntityTextUrl,\
@@ -50,7 +49,7 @@ async def handler(m, webhook_url):
         path = await m.download_media()
         print('File saved to', path)  # printed after download is done
         try:
-            await webhook.send(file=File(path))
+            await webhook.send(file=discord.File(path))
             print('File sent')
         except:
             print('unable to send file')
@@ -98,6 +97,7 @@ async def handler(m, webhook_url):
         await webhook.send(message2)
         await webhook.send(message3)
         print('sent messages')
+    await session.close()
 
 
 def improveMessage(m):
