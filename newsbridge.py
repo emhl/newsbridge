@@ -115,12 +115,12 @@ def improveMessage(m):
                     offset = offset + len(entity.url) + 4
                 elif (type(entity) is MessageEntityUrl):
                     print('other url')
-                    if m.message[entity.offset+offset:entity.offset+offset+entity.length].find('http') == -1:
-                        m.message = m.message[:entity.offset+offset] + \
-                            'https://' + m.message[entity.offset+offset:]
-                        offset = offset + 8
-                    else:
-                        print('had http')
+                    # if m.message[entity.offset+offset:entity.offset+offset+entity.length].find('http') == -1:
+                    #     m.message = m.message[:entity.offset+offset] + \
+                    #         'https://' + m.message[entity.offset+offset:]
+                    #     offset = offset + 8
+                    # else:
+                    #     print('had http')
                 elif (type(entity) is MessageEntityBold):
                     print('bold')
                     m.message = m.message[:entity.offset+offset] + '**' + m.message[entity.offset+offset:entity.offset +
