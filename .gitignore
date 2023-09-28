@@ -6,3 +6,6 @@
 # ide cobfigs
 /.idea
 /.vscode
+
+# program data
+/data

@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  app:
+    image: newsbridge
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./anon.session:/app/anon.session
+      - ./data:/app/data
+    env_file:
+      - .env
